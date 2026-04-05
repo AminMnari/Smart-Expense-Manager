@@ -1,0 +1,58 @@
+# Android build outputs
+.gradle/
+build/
+app/build/
+*/build/
+
+# Android Studio IDE files
+.idea/
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+*.iml
+*.iws
+*.ipr
+
+# Local configuration files - CRITICAL: contains sensitive API keys
+local.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Kotlin/Java compiled files
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.aar
+
+# Sensitive credentials
+google-services.json
+*.keystore
+*.jks
+
+# Gradle wrapper - keep these tracked
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat
+
+# KSP/Room schema - KEEP tracked for migration history
+# (don't add app/schemas/ to gitignore)
+
+# IDE temp files
+*.swp
+*.swo
+*~
+.vscode/
+*.sublime-workspace
+
+# Test coverage
+coverage/
+*.lcov
+
+# Runtime files
+*.log
+
+# Build caches
+.externalNativeBuild
+.cxx
+/captures
