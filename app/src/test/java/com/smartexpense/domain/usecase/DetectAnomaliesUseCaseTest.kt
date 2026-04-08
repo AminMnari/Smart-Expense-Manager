@@ -5,6 +5,7 @@ import com.smartexpense.domain.model.WeeklyTotal
 import com.smartexpense.domain.repository.BudgetRepository
 import com.smartexpense.domain.repository.ExpenseRepository
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import java.time.YearMonth
 import kotlinx.coroutines.flow.flowOf
@@ -32,7 +33,7 @@ class DetectAnomaliesUseCaseTest {
 
     @Test
     fun returnsEmptyListWhenNoExpensesExist() = runTest {
-        coEvery { budgetRepository.getBudgets(any()) } returns flowOf(
+        every { budgetRepository.getBudgets(any()) } returns flowOf(
             listOf(Budget(categoryId = 1L, monthlyLimit = 100.0, month = YearMonth.now()))
         )
         coEvery { expenseRepository.getWeeklyTotals(1L, 5) } returns emptyList()
@@ -44,7 +45,7 @@ class DetectAnomaliesUseCaseTest {
 
     @Test
     fun returnsAnomalyEventWhenCurrentWeekExceedsThreshold() = runTest {
-        coEvery { budgetRepository.getBudgets(any()) } returns flowOf(
+        every { budgetRepository.getBudgets(any()) } returns flowOf(
             listOf(Budget(categoryId = 1L, monthlyLimit = 500.0, alertThresholdPercent = 150, month = YearMonth.now()))
         )
         coEvery { expenseRepository.getWeeklyTotals(1L, 5) } returns listOf(
@@ -63,7 +64,7 @@ class DetectAnomaliesUseCaseTest {
 
     @Test
     fun returnsNoEventWhenSpendingIsBelowThreshold() = runTest {
-        coEvery { budgetRepository.getBudgets(any()) } returns flowOf(
+        every { budgetRepository.getBudgets(any()) } returns flowOf(
             listOf(Budget(categoryId = 1L, monthlyLimit = 500.0, alertThresholdPercent = 150, month = YearMonth.now()))
         )
         coEvery { expenseRepository.getWeeklyTotals(1L, 5) } returns listOf(
@@ -81,7 +82,7 @@ class DetectAnomaliesUseCaseTest {
 
     @Test
     fun handlesMultipleCategoriesIndependently() = runTest {
-        coEvery { budgetRepository.getBudgets(any()) } returns flowOf(
+        every { budgetRepository.getBudgets(any()) } returns flowOf(
             listOf(
                 Budget(categoryId = 1L, monthlyLimit = 500.0, alertThresholdPercent = 150, month = YearMonth.now()),
                 Budget(categoryId = 2L, monthlyLimit = 500.0, alertThresholdPercent = 150, month = YearMonth.now())
@@ -108,4 +109,5 @@ class DetectAnomaliesUseCaseTest {
         assertEquals(1L, result.first().categoryId)
     }
 }
+
 
