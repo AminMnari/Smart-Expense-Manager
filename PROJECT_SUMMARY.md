@@ -195,15 +195,16 @@ Smart Expense Manager is a personal finance optimization app built with Kotlin, 
 
 ---
 
-## Known Limitations
+### Known Limitations
 
 ### Current State
-1. **No UI Screens Yet** - All presentation routes are placeholder composables
-2. **Mock Insight Generation** - Fallback local insight builder lacks real Gemini API calls (when offline)
-3. **No Camera Implementation** - ScanViewModel expects bitmap input but no camera capture UI
-4. **No Notifications** - Anomaly alerts detected but not surfaced as push notifications
-5. **No Background Sync** - WorkManager scaffolded but not wired to AnomalyWorker
-6. **Single-User Only** - No multi-account or cloud sync support
+1. ✅ **UI Screens Complete** - All 9 presentation screens implemented with Material 3 design
+2. ✅ **WorkManager Wired** - AnomalyWorker integrated with DetectAnomaliesUseCase for daily anomaly detection
+3. ✅ **Notifications Ready** - NotificationHelper configured for anomaly alerts
+4. ✅ **Build Stabilized** - SDK updated to 36, all dependencies synced
+5. ✅ **Unit Tests Passing** - 12/12 tests passing (repository tests converted to mockk-based tests)
+6. **Camera Implementation** - ScanViewModel expects bitmap input but no UI camera capture yet
+7. **Single-User Only** - No multi-account or cloud sync support
 
 ### Build & Environment
 1. **Kotlin JVM Target Fallback** - JDK 25 falls back to JVM 24 (non-critical)

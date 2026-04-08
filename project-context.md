@@ -6,7 +6,7 @@
 - Language: Kotlin
 - UI: Jetpack Compose + Material Design 3
 - Architecture: MVVM + Repository + Clean Architecture
-- Min SDK: 26 | Target SDK: 35
+- Min SDK: 26 | Target SDK: 36
 - DI: Hilt
 - Build: Gradle (Kotlin DSL)
 
