@@ -44,6 +44,7 @@ object DatabaseModule {
         ).build()
     }
 
+
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
