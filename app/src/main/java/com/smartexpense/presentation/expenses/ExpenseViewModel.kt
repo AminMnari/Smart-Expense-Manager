@@ -55,6 +55,22 @@ class ExpenseViewModel @Inject constructor(
         }
     }
 
+    fun onSaveExpense(expense: Expense, onSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            saveExpenseUseCase(expense)
+                .onSuccess {
+                    onSuccess()
+                }
+                .onFailure { exception ->
+                    _uiState.value = _uiState.value.copy(error = exception.message ?: "Failed to save expense")
+                }
+        }
+    }
+
+    fun onRestoreExpense(expense: Expense) {
+        onSaveExpense(expense)
+    }
+
     private fun observeExpenses() {
         observeJob?.cancel()
         observeJob = viewModelScope.launch {
