@@ -34,14 +34,17 @@ class DashboardViewModel @Inject constructor(
         )
     )
     val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
-    private var observeJob: Job? = null
+    private var expensesJob: Job? = null
 
     init {
-        observeMonth(YearMonth.now())
+        val currentMonth = YearMonth.now()
+        _uiState.value = _uiState.value.copy(selectedMonth = currentMonth)
+        loadExpenses(currentMonth)
     }
 
     fun onMonthChanged(month: YearMonth) {
-        observeMonth(month)
+        _uiState.value = _uiState.value.copy(selectedMonth = month)
+        loadExpenses(month)
     }
 
     fun onDeleteExpense(expense: Expense) {
@@ -52,34 +55,25 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    private fun observeMonth(month: YearMonth) {
-        observeJob?.cancel()
-        observeJob = viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(selectedMonth = month, isLoading = true, error = null)
-            try {
-                getExpensesUseCase(month.atDay(1), month.atEndOfMonth()).collect { expenses ->
-                    _uiState.value = DashboardUiState(
-                        expenses = expenses,
-                        categoryTotals = calculateCategoryTotals(expenses),
-                        totalSpent = expenses.sumOf { it.amount },
-                        selectedMonth = month,
-                        isLoading = false,
-                        error = null
-                    )
-                }
-            } catch (exception: Exception) {
+    private fun loadExpenses(month: YearMonth) {
+        expensesJob?.cancel()
+        _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+        expensesJob = viewModelScope.launch {
+            getExpensesUseCase(
+                start = month.atDay(1),
+                end = month.atEndOfMonth()
+            ).collect { expenses ->
                 _uiState.value = _uiState.value.copy(
+                    expenses = expenses,
+                    totalSpent = expenses.sumOf { it.amount },
+                    categoryTotals = expenses
+                        .groupBy { it.categoryId.toString() }
+                        .mapValues { (_, v) -> v.sumOf { it.amount } },
                     isLoading = false,
-                    error = exception.message ?: "Failed to load dashboard"
+                    error = null
                 )
             }
         }
-    }
-
-    private fun calculateCategoryTotals(expenses: List<Expense>): Map<String, Double> {
-        return expenses.groupBy { it.categoryId }
-            .mapKeys { (categoryId, _) -> "Category $categoryId" }
-            .mapValues { (_, list) -> list.sumOf { it.amount } }
     }
 }
 
