@@ -40,6 +40,9 @@
     <string name="choose_from_gallery">Choose from Gallery</string>
     <string name="scan_hint">Capture or select a receipt image to begin OCR analysis.</string>
     <string name="analyzing_receipt">Analyzing receipt...</string>
+    <string name="camera_permission_required">Camera permission required</string>
+    <string name="scan_success_banner">Receipt scanned successfully - review and confirm below</string>
+    <string name="scan_error_banner">Could not read receipt - please fill in manually</string>
     <string name="enter_manually">Enter Manually</string>
     <string name="edit_manually">Edit Manually</string>
     <string name="save_expense">Save Expense</string>

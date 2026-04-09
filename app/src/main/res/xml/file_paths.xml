@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <cache-path
-        name="receipt_images"
-        path="receipt_images/" />
+    <files-path name="camera_images" path="." />
+    <external-files-path name="camera_images_ext" path="Pictures/" />
 </paths>
 
