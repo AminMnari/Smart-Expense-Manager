@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Smart Expense Manager</string>
+    <string name="app_name">Gestionnaire intelligent des dépenses</string>
 
-    <string name="dashboard_title">Smart Expense Manager</string>
+    <string name="dashboard_title">Gestionnaire intelligent des dépenses</string>
     <string name="expenses_title">Depenses</string>
     <string name="expense_detail_title">Detail de la depense</string>
     <string name="scan_receipt_title">Scanner le recu</string>
@@ -113,7 +113,8 @@
     <string name="about">A propos</string>
     <string name="about_desc">Version de cette application et informations IA</string>
     <string name="view_about">Voir A propos</string>
-    <string name="about_body">%1$s v%2$s\nConstruit avec ML Kit + Gemini AI</string>
+    <string name="about_body">%1$s v%2$s
+Construit avec ML Kit + Gemini AI</string>
     <string name="about_description_full">Smart Expense Manager vous aide a suivre vos depenses quotidiennes, analyser vos habitudes de depense et gerer votre budget avec des insights bases sur IA.</string>
     <string name="about_version">Version : %1$s</string>
     <string name="about_platform">Plateforme : Android</string>
