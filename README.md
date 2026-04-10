@@ -2,6 +2,40 @@
 
 A personal finance optimization app that helps users track expenses, detect spending anomalies, and receive AI-powered financial insights. Built with Kotlin, Jetpack Compose, and Google's Gemini AI.
 
+## Getting Started
+
+### Prerequisites
+- Android Studio Hedgehog or later
+- Android device or emulator running API 26+
+- A free Gemini API key from https://aistudio.google.com
+
+### Setup
+1. Clone the repository:
+   git clone https://github.com/AminMnari/Smart-Expense-Manager.git
+
+2. Open the project in Android Studio
+
+3. Create a local.properties file in the project root
+   (this file is not included in the repo for security reasons)
+   Add these two lines:
+     sdk.dir=YOUR_ANDROID_SDK_PATH
+     GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+
+   Example sdk.dir values:
+     Windows: sdk.dir=C\:\\Users\\YourName\\AppData\\Local\\Android\\Sdk
+     Mac:     sdk.dir=/Users/YourName/Library/Android/sdk
+     Linux:   sdk.dir=/home/YourName/Android/Sdk
+
+4. Sync Gradle: File -> Sync Project with Gradle Files
+
+5. Run the app on an emulator or physical device (API 26+)
+
+### Notes
+- The app works offline for all features except
+  AI receipt scanning and insight generation
+- Camera permission will be requested on first use
+- Categories are seeded automatically on first launch
+
 ## Features
 
 - **Receipt Scanning & OCR** - Capture receipts using your device camera, automatically extract expense details with ML Kit text recognition
