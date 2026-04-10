@@ -3,6 +3,7 @@ package com.smartexpense
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.smartexpense.utils.LanguageHelper
 import com.smartexpense.worker.WorkManagerHelper
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -18,6 +19,8 @@ class SmartExpenseApplication : Application(), Configuration.Provider {
 
 	override fun onCreate() {
 		super.onCreate()
+		val savedLang = LanguageHelper.getSavedLanguage(this)
+		LanguageHelper.applyLanguage(this, savedLang)
 		WorkManagerHelper.scheduleAnomalyDetection(this)
 	}
 

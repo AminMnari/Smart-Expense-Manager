@@ -10,6 +10,16 @@
     <string name="spending_alerts_title">Spending Alerts</string>
     <string name="ai_insights_title">AI Insights</string>
     <string name="settings_title">Settings</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="scan_receipt">Scan Receipt</string>
+    <string name="spending_alerts">Spending Alerts</string>
+    <string name="ai_insights">AI Insights</string>
+    <string name="settings">Settings</string>
+    <string name="budget">Budget</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="clear_data">Clear Data</string>
+    <string name="language">Language</string>
+    <string name="no_expenses">No expenses yet</string>
 
     <string name="cd_open_settings">Open settings</string>
     <string name="cd_budget_settings">Open budget settings</string>
@@ -34,6 +44,7 @@
     <string name="recent_expenses">Recent Expenses</string>
     <string name="currency_amount_tnd">%1$.2f TND</string>
     <string name="spent_over_limit">Spent %1$.2f / %2$.2f TND</string>
+    <string name="amount_pair">%1$s / %2$s</string>
     <string name="expense_list_meta">%1$s • %2$s</string>
 
     <string name="take_photo">Take Photo</string>
@@ -103,6 +114,10 @@
     <string name="about_desc">App version and AI stack information</string>
     <string name="view_about">View About</string>
     <string name="about_body">%1$s v%2$s\nBuilt with ML Kit + Gemini AI</string>
+    <string name="about_description_full">Smart Expense Manager helps you track your daily expenses, analyze spending habits, and manage your budget using AI-powered insights.</string>
+    <string name="about_version">Version: %1$s</string>
+    <string name="about_platform">Platform: Android</string>
+    <string name="about_ai">AI: ML Kit + Gemini 2.5 Flash</string>
     <string name="ok">OK</string>
     <string name="data_cleared">All local data has been cleared.</string>
     <string name="notification_title">Spending Alert - %1$s</string>

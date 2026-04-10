@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name">مدير المصروفات الذكي</string>
+
+    <string name="dashboard_title">مدير المصروفات الذكي</string>
+    <string name="expenses_title">المصروفات</string>
+    <string name="expense_detail_title">تفاصيل المصروف</string>
+    <string name="scan_receipt_title">مسح الإيصال</string>
+    <string name="add_expense_title">إضافة مصروف</string>
+    <string name="budget_settings_title">إعدادات الميزانية</string>
+    <string name="spending_alerts_title">تنبيهات الإنفاق</string>
+    <string name="ai_insights_title">تحليلات الذكاء الاصطناعي</string>
+    <string name="settings_title">الإعدادات</string>
+    <string name="dashboard">لوحة التحكم</string>
+    <string name="scan_receipt">مسح الإيصال</string>
+    <string name="spending_alerts">تنبيهات الإنفاق</string>
+    <string name="ai_insights">تحليلات الذكاء الاصطناعي</string>
+    <string name="settings">الإعدادات</string>
+    <string name="budget">الميزانية</string>
+    <string name="add_expense">إضافة مصروف</string>
+    <string name="clear_data">مسح البيانات</string>
+    <string name="language">اللغة</string>
+    <string name="no_expenses">لا توجد مصروفات بعد</string>
+
+    <string name="cd_open_settings">فتح الإعدادات</string>
+    <string name="cd_budget_settings">فتح إعدادات الميزانية</string>
+    <string name="cd_add_expense">إضافة مصروف</string>
+    <string name="cd_toggle_filters">إظهار أو إخفاء الفلاتر</string>
+    <string name="cd_edit_expense">تعديل المصروف</string>
+    <string name="cd_delete_expense">حذف المصروف</string>
+    <string name="cd_receipt_image">صورة الإيصال</string>
+    <string name="cd_tab_dashboard">تبويب لوحة التحكم</string>
+    <string name="cd_tab_scan">تبويب المسح</string>
+    <string name="cd_tab_expenses">تبويب المصروفات</string>
+    <string name="cd_tab_alerts">تبويب التنبيهات</string>
+    <string name="cd_tab_insights">تبويب التحليلات</string>
+
+    <string name="month_previous">الشهر السابق</string>
+    <string name="month_next">الشهر التالي</string>
+    <string name="back">رجوع</string>
+
+    <string name="total_spent">إجمالي الإنفاق</string>
+    <string name="category_breakdown">التوزيع حسب الفئة</string>
+    <string name="budget_progress">تقدم الميزانية</string>
+    <string name="recent_expenses">أحدث المصروفات</string>
+    <string name="currency_amount_tnd">%1$.2f TND</string>
+    <string name="spent_over_limit">تم إنفاق %1$.2f / %2$.2f TND</string>
+    <string name="amount_pair">%1$s / %2$s</string>
+    <string name="expense_list_meta">%1$s • %2$s</string>
+
+    <string name="take_photo">التقاط صورة</string>
+    <string name="choose_from_gallery">اختيار من المعرض</string>
+    <string name="scan_hint">التقط أو اختر صورة إيصال لبدء تحليل OCR.</string>
+    <string name="analyzing_receipt">جاري تحليل الإيصال...</string>
+    <string name="camera_permission_required">مطلوب إذن الكاميرا</string>
+    <string name="scan_success_banner">تم مسح الإيصال بنجاح - راجع وأكد بالأسفل</string>
+    <string name="scan_error_banner">تعذر قراءة الإيصال - يرجى الإدخال يدويًا</string>
+    <string name="enter_manually">إدخال يدوي</string>
+    <string name="edit_manually">تعديل يدوي</string>
+    <string name="save_expense">حفظ المصروف</string>
+
+    <string name="merchant_name">اسم التاجر</string>
+    <string name="amount">المبلغ</string>
+    <string name="date">التاريخ</string>
+    <string name="pick_date">اختر التاريخ</string>
+    <string name="category">الفئة</string>
+    <string name="notes">ملاحظات</string>
+    <string name="save">حفظ</string>
+    <string name="all">الكل</string>
+    <string name="undo">تراجع</string>
+    <string name="delete">حذف</string>
+    <string name="expense_deleted_amount">تم حذف مصروف بقيمة %1$.2f TND</string>
+
+    <string name="expense_not_found">المصروف غير موجود.</string>
+    <string name="merchant_name_value">التاجر: %1$s</string>
+    <string name="amount_value">المبلغ: %1$.2f TND</string>
+    <string name="category_value">الفئة: %1$s</string>
+    <string name="date_value">التاريخ: %1$s</string>
+    <string name="notes_value">الملاحظات: %1$s</string>
+    <string name="ai_categorized">مصنف بالذكاء الاصطناعي</string>
+    <string name="delete_expense">حذف المصروف</string>
+    <string name="delete_expense_confirm">هل أنت متأكد من حذف هذا المصروف؟</string>
+    <string name="cancel">إلغاء</string>
+    <string name="not_available">غير متاح</string>
+
+    <string name="not_set">غير مضبوط</string>
+    <string name="current_limit_amount">الحد الحالي: %1$.2f TND</string>
+    <string name="monthly_limit">الحد الشهري</string>
+    <string name="alert_threshold_percent">نسبة التنبيه: %d%%</string>
+
+    <string name="no_alerts_yet">لا توجد تنبيهات بعد</string>
+    <string name="alert_percent_message">أنفقت %1$.1f%% أكثر من المعتاد على %2$s</string>
+    <string name="alert_amount_comparison">الأسبوع الحالي: %1$.2f TND • المتوسط: %2$.2f TND</string>
+
+    <string name="generate_insight">توليد تحليل</string>
+    <string name="analyzing_spending">جاري تحليل إنفاقك...</string>
+    <string name="budget_score">درجة الميزانية</string>
+    <string name="summary">الملخص</string>
+    <string name="top_categories">أهم الفئات</string>
+    <string name="savings_tips">نصائح التوفير</string>
+    <string name="tip_number">%1$d.</string>
+    <string name="dismiss">إخفاء</string>
+
+    <string name="currency">العملة</string>
+    <string name="currency_tnd">TND</string>
+    <string name="anomaly_alert_threshold">حد تنبيه الشذوذ</string>
+    <string name="configure_budget_threshold">اضبط حدود كل فئة في الميزانية</string>
+    <string name="open_budget_settings">فتح إعدادات الميزانية</string>
+    <string name="clear_all_data">مسح جميع البيانات</string>
+    <string name="clear_all_data_desc">حذف كل المصروفات والميزانيات المخزنة نهائيًا</string>
+    <string name="clear_data_now">امسح البيانات الآن</string>
+    <string name="clear_all_data_confirm">لا يمكن التراجع عن هذا الإجراء. هل تريد المتابعة؟</string>
+    <string name="confirm">تأكيد</string>
+    <string name="about">حول</string>
+    <string name="about_desc">إصدار التطبيق ومعلومات الذكاء الاصطناعي</string>
+    <string name="view_about">عرض حول</string>
+    <string name="about_body">%1$s v%2$s\nمبني باستخدام ML Kit + Gemini AI</string>
+    <string name="about_description_full">يساعدك Smart Expense Manager على تتبع مصروفاتك اليومية، وتحليل عادات الإنفاق، وإدارة ميزانيتك باستخدام تحليلات مدعومة بالذكاء الاصطناعي.</string>
+    <string name="about_version">الإصدار: %1$s</string>
+    <string name="about_platform">المنصة: Android</string>
+    <string name="about_ai">الذكاء الاصطناعي: ML Kit + Gemini 2.5 Flash</string>
+    <string name="ok">موافق</string>
+    <string name="data_cleared">تم مسح جميع البيانات المحلية.</string>
+    <string name="notification_title">تنبيه إنفاق - %1$s</string>
+    <string name="notification_text">أنفقت %1$s%% أكثر من المعتاد هذا الأسبوع</string>
+
+    <string name="category_food">طعام</string>
+    <string name="category_transport">نقل</string>
+    <string name="category_shopping">تسوق</string>
+    <string name="category_health">صحة</string>
+    <string name="category_utilities">فواتير</string>
+    <string name="category_entertainment">ترفيه</string>
+    <string name="category_education">تعليم</string>
+    <string name="category_other">أخرى</string>
+</resources>
+
