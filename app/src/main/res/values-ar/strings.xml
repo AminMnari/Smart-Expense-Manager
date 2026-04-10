@@ -113,7 +113,8 @@
     <string name="about">حول</string>
     <string name="about_desc">إصدار التطبيق ومعلومات الذكاء الاصطناعي</string>
     <string name="view_about">عرض حول</string>
-    <string name="about_body">%1$s v%2$s\nمبني باستخدام ML Kit + Gemini AI</string>
+    <string name="about_body">%1$s v%2$s
+مبني باستخدام ML Kit + Gemini AI</string>
     <string name="about_description_full">يساعدك Smart Expense Manager على تتبع مصروفاتك اليومية، وتحليل عادات الإنفاق، وإدارة ميزانيتك باستخدام تحليلات مدعومة بالذكاء الاصطناعي.</string>
     <string name="about_version">الإصدار: %1$s</string>
     <string name="about_platform">المنصة: Android</string>
