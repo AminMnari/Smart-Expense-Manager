@@ -39,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ import com.smartexpense.domain.model.Budget
 import com.smartexpense.presentation.CategorySpecs
 import com.smartexpense.presentation.budget.BudgetViewModel
 import com.smartexpense.presentation.categorySpecById
+import com.smartexpense.utils.CurrencyHelper
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -64,8 +66,10 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
     budgetViewModel: BudgetViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val budgetState by budgetViewModel.uiState.collectAsStateWithLifecycle()
+    val currency = CurrencyHelper.getSavedCurrency(context)
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(uiState.error) {
@@ -132,7 +136,7 @@ fun DashboardScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = stringResource(id = R.string.total_spent))
                             Text(
-                                text = stringResource(id = R.string.currency_amount_tnd, uiState.totalSpent),
+                                text = CurrencyHelper.formatAmount(uiState.totalSpent, currency),
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold
                             )
@@ -157,9 +161,9 @@ fun DashboardScreen(
                                     Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                         Text(text = stringResource(id = spec.nameRes), style = MaterialTheme.typography.bodyMedium)
                                         Text(
-                                            text = stringResource(
-                                                id = R.string.currency_amount_tnd,
-                                                uiState.categoryTotals["Category ${spec.id}"] ?: 0.0
+                                            text = CurrencyHelper.formatAmount(
+                                                uiState.categoryTotals["Category ${spec.id}"] ?: 0.0,
+                                                currency
                                             ),
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -181,7 +185,8 @@ fun DashboardScreen(
                 items(budgetState.budgets, key = { it.id }) { budget ->
                     BudgetProgressItem(
                         budget = budget,
-                        spent = uiState.categoryTotals["Category ${budget.categoryId}"] ?: 0.0
+                        spent = uiState.categoryTotals["Category ${budget.categoryId}"] ?: 0.0,
+                        currency = currency
                     )
                 }
 
@@ -208,7 +213,7 @@ fun DashboardScreen(
                         },
                         trailingContent = {
                             Text(
-                                text = stringResource(id = R.string.currency_amount_tnd, expense.amount),
+                                text = CurrencyHelper.formatAmount(expense.amount, currency),
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -222,7 +227,8 @@ fun DashboardScreen(
 @Composable
 private fun BudgetProgressItem(
     budget: Budget,
-    spent: Double
+    spent: Double,
+    currency: String
 ) {
     val categorySpec = categorySpecById(budget.categoryId)
     val progress = if (budget.monthlyLimit == 0.0) 0f else (spent / budget.monthlyLimit).toFloat()
@@ -239,7 +245,11 @@ private fun BudgetProgressItem(
                 )
             }
             Text(
-                text = stringResource(id = R.string.spent_over_limit, spent, budget.monthlyLimit),
+                text = stringResource(
+                    id = R.string.amount_pair,
+                    CurrencyHelper.formatAmount(spent, currency),
+                    CurrencyHelper.formatAmount(budget.monthlyLimit, currency)
+                ),
                 style = MaterialTheme.typography.bodySmall
             )
             LinearProgressIndicator(

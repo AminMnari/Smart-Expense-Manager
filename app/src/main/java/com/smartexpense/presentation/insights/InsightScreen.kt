@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.smartexpense.R
 import com.smartexpense.presentation.dashboard.MonthSelector
+import com.smartexpense.utils.CurrencyHelper
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -55,7 +57,9 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InsightScreen(viewModel: InsightViewModel = hiltViewModel()) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val currency = CurrencyHelper.getSavedCurrency(context)
     val snackbarHostState = remember { SnackbarHostState() }
     var selectedMonth by remember { mutableStateOf(YearMonth.now()) }
 
@@ -195,7 +199,7 @@ fun InsightScreen(viewModel: InsightViewModel = hiltViewModel()) {
                     ListItem(
                         headlineContent = { Text(text = categorySpend.category) },
                         supportingContent = {
-                            Text(text = stringResource(id = R.string.currency_amount_tnd, categorySpend.amount))
+                            Text(text = CurrencyHelper.formatAmount(categorySpend.amount, currency))
                         },
                         trailingContent = { Icon(imageVector = icon, contentDescription = null, tint = tint) }
                     )
