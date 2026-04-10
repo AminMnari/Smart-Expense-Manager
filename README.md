@@ -60,7 +60,7 @@ A personal finance optimization app that helps users track expenses, detect spen
 | **Networking** | Retrofit + OkHttp | HTTP client with interceptors | 2.11.0 + 4.12.0 |
 | **JSON** | Gson | JSON serialization/deserialization | 2.11.0 |
 | **OCR** | ML Kit Text Recognition | On-device receipt text extraction | 16.0.1 |
-| **AI** | Gemini API | Receipt parsing and insight generation | gemini-pro |
+| **AI** | Gemini API | Receipt parsing and insight generation | gemini-2.5-flash |
 | **Image Loading** | Coil | Efficient Compose image loading | 2.7.0 |
 | **Background Jobs** | WorkManager | Scheduled anomaly detection tasks | 2.10.1 |
 | **Charts** | MPAndroidChart | Spending visualization and trends | 3.1.0 |
@@ -119,44 +119,6 @@ SmartExpenseManager/
 └── local.properties                         ← Local config (git-ignored)
 ```
 
-## Setup Instructions
-
-### Prerequisites
-- Android Studio Flamingo or later
-- Android SDK 26+ (API level)
-- Kotlin 2.0+
-- Java 11+
-
-### Step 1: Clone the repository
-```bash
-git clone https://github.com/AminMnari/Smart-Expense-Manager.git
-cd SmartExpenseManager
-```
-
-### Step 2: Add your Gemini API key
-Open `local.properties` and add your Google Gemini API key:
-```properties
-GEMINI_API_KEY=your_api_key_here
-sdk.dir=/path/to/android/sdk
-```
-
-### Step 3: Open in Android Studio
-1. Open Android Studio
-2. Select "Open an Existing Project"
-3. Navigate to the `SmartExpenseManager` directory
-4. Wait for the project to load
-
-### Step 4: Sync Gradle
-1. Go to **File** → **Sync Project with Gradle Files**
-2. Wait for the sync to complete
-3. Check the Gradle console for "BUILD SUCCESSFUL"
-
-### Step 5: Run the app
-1. Create a virtual device or connect a physical device (API 26+)
-2. Click the **Run** button (green play icon) or press **Shift + F10**
-3. Select your target device
-4. The app should launch and show the Dashboard placeholder
-
 ## Architecture
 
 The app follows a **Clean Architecture** with clear separation of concerns:
@@ -200,28 +162,30 @@ The app follows a **Clean Architecture** with clear separation of concerns:
 ## Current Status
 
 ### ✅ Complete
-- **Backend Layer**: Room database, DAOs, entities with foreign key indexes
-- **Domain Layer**: Models, repository interfaces, use cases with business logic
-- **Data Layer**: Entity mappers, repository implementations with DAO delegation
-- **Remote Services**: ML Kit OCR wrapper, Gemini API client with request/response payloads
-- **Dependency Injection**: Hilt module with database, services, and repository bindings
-- **ViewModels**: All 6 feature ViewModels with UI state management
-- **Navigation**: Typed routing with Screen sealed class and NavGraph scaffolding
-- **Build Config**: Version catalog, dependencies, Gradle setup, BuildConfig integration
+- Full Clean Architecture implementation (data, domain, presentation)
+- Room database with 4 entities, DAOs, TypeConverters, and category seeding
+- ML Kit OCR on-device receipt text extraction
+- Gemini 2.5 Flash AI integration for expense parsing and monthly insights
+- All 9 Compose screens fully implemented and wired
+- Bottom navigation with 4 tabs (Dashboard, Scan, Alerts, Insights)
+- WorkManager daily anomaly detection with push notifications
+- Real-time dashboard with Flow-based expense updates
+- Budget management with per-category limits and thresholds
+- AI Insights with real category names and empty-month guard
+- Language switcher supporting English, French, and Arabic
+- Currency selector supporting TND, USD, EUR, GBP, SAR, AED, MAD, DZD
+- Clear all data with Room table wipe and app restart
+- Camera integration with FileProvider and runtime permission handling
+- 12 unit tests passing (use cases, mappers, repositories)
+- 25 Git commits showing incremental development progress
 
-### 🚀 In Progress
-- Feature Screens: Compose UI for all 8 routes
-- Camera Integration: Receipt capture intent handling
-- Error Handling: Network retry logic and offline detection
-- Testing: Unit tests for use cases and ViewModels
-
-### 📋 Future
-- WorkManager integration for background anomaly detection
-- Firebase Cloud Messaging for push notifications
-- Room schema migrations and version management
-- Multi-language support (localization)
-- Dark mode refinements
-- Advanced filtering and export features
+### 📋 Future Improvements
+- Dashboard pie/bar charts using MPAndroidChart
+- Expense list accessible from bottom navigation
+- Receipt image saved and displayed in expense detail screen
+- Firebase Cloud Messaging for remote push notifications
+- Room schema migrations for future database changes
+- Export expenses as PDF or CSV
 
 ## Development Workflow
 
@@ -290,7 +254,7 @@ For questions or suggestions, open an issue on GitHub or contact the maintainers
 
 ---
 
-**Last Updated**: April 5, 2026  
-**Project Status**: Backend complete, UI in progress  
-**Target Completion**: Q2 2026
+**Last Updated**: April 2026  
+**Project Status**: Fully functional — tested on Android device  
+**GitHub**: https://github.com/AminMnari/Smart-Expense-Manager
 
