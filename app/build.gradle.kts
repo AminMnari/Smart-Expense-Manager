@@ -43,6 +43,8 @@ android {
         }
     }
 
+
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -53,14 +55,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
     }
-
-
-    ksp {
-        arg("room.schemaLocation", "$projectDir/schemas")
-        arg("room.incremental", "true")
-    }
 }
-
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+}
 dependencies {
     // Core
     implementation(libs.androidx.core.ktx)
