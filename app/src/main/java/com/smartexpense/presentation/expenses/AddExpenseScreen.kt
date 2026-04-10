@@ -37,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.smartexpense.R
 import com.smartexpense.domain.model.Expense
-import com.smartexpense.presentation.CategorySpecs
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -52,15 +51,22 @@ fun AddExpenseScreen(
     viewModel: ExpenseViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val categories by viewModel.categories.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     var merchantName by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(LocalDate.now()) }
-    var categoryId by remember { mutableStateOf(CategorySpecs.last().id) }
+    var categoryId by remember { mutableStateOf(0L) }
     var notes by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val formatter = remember { DateTimeFormatter.ISO_LOCAL_DATE }
+
+    LaunchedEffect(categories) {
+        if (categoryId == 0L || categories.none { it.id == categoryId }) {
+            categoryId = categories.firstOrNull()?.id ?: 0L
+        }
+    }
 
     val datePicker = remember {
         DatePickerDialog(
@@ -135,7 +141,7 @@ fun AddExpenseScreen(
             )
             ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
                 OutlinedTextField(
-                    value = stringResource(id = CategorySpecs.first { it.id == categoryId }.nameRes),
+                    value = categories.firstOrNull { it.id == categoryId }?.name.orEmpty(),
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(text = stringResource(id = R.string.category)) },
@@ -145,9 +151,9 @@ fun AddExpenseScreen(
                         .fillMaxWidth()
                 )
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    CategorySpecs.forEach { option ->
+                    categories.forEach { option ->
                         DropdownMenuItem(
-                            text = { Text(text = stringResource(id = option.nameRes)) },
+                            text = { Text(text = option.name) },
                             onClick = {
                                 categoryId = option.id
                                 expanded = false
@@ -166,6 +172,7 @@ fun AddExpenseScreen(
             )
             Button(
                 onClick = {
+                    if (categoryId == 0L) return@Button
                     val parsedAmount = amount.toDoubleOrNull() ?: 0.0
                     viewModel.onSaveExpense(
                         Expense(

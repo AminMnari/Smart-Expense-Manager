@@ -2,7 +2,9 @@ package com.smartexpense.presentation.expenses
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.smartexpense.domain.model.Category
 import com.smartexpense.domain.model.Expense
+import com.smartexpense.domain.usecase.GetCategoriesUseCase
 import com.smartexpense.domain.usecase.GetExpensesUseCase
 import com.smartexpense.domain.usecase.SaveExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,11 +24,14 @@ import javax.inject.Inject
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
+    private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getExpensesUseCase: GetExpensesUseCase,
     private val saveExpenseUseCase: SaveExpenseUseCase
 ) : ViewModel() {
 
     private val filterFlow = MutableStateFlow(ExpenseFilter())
+    private val _categories = MutableStateFlow<List<Category>>(emptyList())
+    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
     private val _uiState = MutableStateFlow(
         ExpenseUiState(
             expenses = emptyList(),
@@ -39,7 +44,16 @@ class ExpenseViewModel @Inject constructor(
     private var observeJob: Job? = null
 
     init {
+        observeCategories()
         observeExpenses()
+    }
+
+    private fun observeCategories() {
+        viewModelScope.launch {
+            getCategoriesUseCase().collect { categories ->
+                _categories.value = categories
+            }
+        }
     }
 
     fun onFilterChanged(filter: ExpenseFilter) {
