@@ -1,6 +1,7 @@
 package com.smartexpense.domain.usecase
 
 import com.smartexpense.domain.model.InsightResult
+import com.smartexpense.domain.repository.CategoryRepository
 import com.smartexpense.domain.repository.ExpenseRepository
 import com.smartexpense.domain.repository.InsightRepository
 import kotlinx.coroutines.flow.first
@@ -12,7 +13,8 @@ import javax.inject.Inject
  */
 class GenerateInsightUseCase @Inject constructor(
     private val insightRepository: InsightRepository,
-    private val expenseRepository: ExpenseRepository
+    private val expenseRepository: ExpenseRepository,
+    private val categoryRepository: CategoryRepository
 ) {
 
     suspend operator fun invoke(month: YearMonth): Result<InsightResult> {
@@ -24,7 +26,15 @@ class GenerateInsightUseCase @Inject constructor(
             val startDate = month.atDay(1)
             val endDate = month.atEndOfMonth()
             val expenses = expenseRepository.getByPeriod(startDate, endDate).first()
-            val insight = insightRepository.generateInsight(expenses)
+            if (expenses.isEmpty()) {
+                return Result.failure(
+                    Exception("No expenses found for ${month.month.name} ${month.year}. Add some expenses first.")
+                )
+            }
+
+            val categories = categoryRepository.getAll().first()
+            val categoryMap = categories.associate { category -> category.id to category.name }
+            val insight = insightRepository.generateInsight(expenses, categoryMap)
             insightRepository.saveInsight(insight)
             Result.success(insight)
         } catch (exception: Exception) {

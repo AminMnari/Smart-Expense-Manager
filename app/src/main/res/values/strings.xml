@@ -87,6 +87,7 @@
     <string name="top_categories">Top Categories</string>
     <string name="savings_tips">Savings Tips</string>
     <string name="tip_number">%1$d.</string>
+    <string name="dismiss">Dismiss</string>
 
     <string name="currency">Currency</string>
     <string name="currency_tnd">TND</string>
