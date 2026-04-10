@@ -32,13 +32,13 @@ class ExpenseRepositoryImplTest {
     fun insertCallsDaoInsertWithCorrectEntity() = runTest {
         val expense = testExpense()
         val entity = expense.toEntity()
-        
+
         coEvery { mockDao.insert(entity) } returns 5L
         coEvery { mockDao.getAll() } returns flowOf(listOf(entity))
 
         val id = repository.insert(expense)
         assertEquals(5L, id)
-        
+
         repository.getAll().collect { expenses ->
             assertEquals(1, expenses.size)
             val first = expenses.first()

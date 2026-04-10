@@ -1,19 +1,21 @@
 package com.smartexpense.di
 
 import android.content.Context
-import com.smartexpense.BuildConfig
 import androidx.room.Room
+import com.smartexpense.BuildConfig
 import com.smartexpense.data.local.dao.AnomalyEventDao
 import com.smartexpense.data.local.dao.BudgetDao
 import com.smartexpense.data.local.dao.CategoryDao
 import com.smartexpense.data.local.dao.ExpenseDao
 import com.smartexpense.data.local.db.AppDatabase
-import com.smartexpense.data.repository.BudgetRepositoryImpl
-import com.smartexpense.data.repository.ExpenseRepositoryImpl
-import com.smartexpense.data.repository.InsightRepositoryImpl
 import com.smartexpense.data.remote.gemini.GeminiApiService
 import com.smartexpense.data.remote.ocr.MlKitOcrService
+import com.smartexpense.data.repository.BudgetRepositoryImpl
+import com.smartexpense.data.repository.CategoryRepositoryImpl
+import com.smartexpense.data.repository.ExpenseRepositoryImpl
+import com.smartexpense.data.repository.InsightRepositoryImpl
 import com.smartexpense.domain.repository.BudgetRepository
+import com.smartexpense.domain.repository.CategoryRepository
 import com.smartexpense.domain.repository.ExpenseRepository
 import com.smartexpense.domain.repository.InsightRepository
 import dagger.Binds
@@ -28,7 +30,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 /**
- * Provides Room database and DAO dependencies.
+ * Provides Room database, DAOs, and singleton services.
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -41,7 +43,9 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "smart_expense_manager.db"
-        ).build()
+        )
+            .addCallback(AppDatabase.categorySeedCallback())
+            .build()
     }
 
 
@@ -50,10 +54,11 @@ object DatabaseModule {
     fun provideOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-            builder.addInterceptor(loggingInterceptor)
+            builder.addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
         }
         return builder.build()
     }
@@ -100,6 +105,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindBudgetRepository(impl: BudgetRepositoryImpl): BudgetRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCategoryRepository(impl: CategoryRepositoryImpl): CategoryRepository
 
     @Binds
     @Singleton
