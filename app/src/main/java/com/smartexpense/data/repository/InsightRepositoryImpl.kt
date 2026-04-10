@@ -3,35 +3,56 @@ package com.smartexpense.data.repository
 import com.smartexpense.data.local.dao.ExpenseDao
 import com.smartexpense.data.mapper.toDomain
 import com.smartexpense.data.remote.gemini.GeminiApiService
-import com.smartexpense.domain.model.Expense
 import com.smartexpense.domain.model.CategorySpend
+import com.smartexpense.domain.model.Expense
 import com.smartexpense.domain.model.InsightResult
 import com.smartexpense.domain.repository.InsightRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import java.time.YearMonth
+import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
+import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Stub implementation of insight repository.
+ * Insight repository implementation with in-memory caching.
  */
 @Singleton
 class InsightRepositoryImpl @Inject constructor(
-    private val expenseDao: ExpenseDao
-    ,private val geminiApiService: GeminiApiService
+    private val expenseDao: ExpenseDao,
+    private val geminiApiService: GeminiApiService
 ) : InsightRepository {
 
     private val cachedInsightFlow = MutableStateFlow<InsightResult?>(null)
 
-    override suspend fun generateInsight(expenses: List<Expense>): InsightResult =
-        geminiApiService.generateInsight(
-            expenses = expenses.ifEmpty { expenseDao.getAll().first().map { it.toDomain() } },
-            budgetSummary = ""
-        ).getOrElse { buildInsight(expenses.ifEmpty { expenseDao.getAll().first().map { it.toDomain() } }) }
+    override suspend fun generateInsight(
+        expenses: List<Expense>,
+        categoryMap: Map<Long, String>
+    ): InsightResult =
+        try {
+            val sourceExpenses = if (expenses.isEmpty()) {
+                expenseDao.getAll().first().map { it.toDomain() }
+            } else {
+                expenses
+            }
+
+            geminiApiService.generateInsight(
+                expenses = sourceExpenses,
+                budgetSummary = buildBudgetSummary(sourceExpenses, categoryMap),
+                categoryMap = categoryMap
+            ).getOrElse {
+                buildInsight(sourceExpenses, categoryMap)
+            }
+        } catch (_: Exception) {
+            val sourceExpenses = if (expenses.isEmpty()) {
+                expenseDao.getAll().first().map { it.toDomain() }
+            } else {
+                expenses
+            }
+            buildInsight(sourceExpenses, categoryMap)
+        }
 
     override fun getCachedInsight(month: YearMonth): Flow<InsightResult?> =
         cachedInsightFlow.map { insight -> insight?.takeIf { it.month == month } }
@@ -40,13 +61,13 @@ class InsightRepositoryImpl @Inject constructor(
         cachedInsightFlow.value = insight
     }
 
-    private fun buildInsight(expenses: List<Expense>): InsightResult {
-        val month = expenses.maxOfOrNull { it.date.yearMonth() } ?: YearMonth.now()
+    private fun buildInsight(expenses: List<Expense>, categoryMap: Map<Long, String>): InsightResult {
+        val month = expenses.maxOfOrNull { YearMonth.from(it.date) } ?: YearMonth.now()
         val total = expenses.sumOf { it.amount }
         val grouped = expenses.groupBy { it.categoryId }
             .map { (categoryId, list) ->
                 CategorySpend(
-                    category = "Category $categoryId",
+                    category = categoryMap[categoryId] ?: "Other",
                     amount = list.sumOf { it.amount },
                     trend = when {
                         list.size > 8 -> "up"
@@ -77,6 +98,14 @@ class InsightRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun java.time.LocalDate.yearMonth(): YearMonth = YearMonth.from(this)
+    private fun buildBudgetSummary(expenses: List<Expense>, categoryMap: Map<Long, String>): String {
+        val total = expenses.sumOf { it.amount }
+        val byCategory = expenses.groupBy { it.categoryId }
+            .map { (categoryId, items) ->
+                (categoryMap[categoryId] ?: "Other") to items.sumOf { it.amount }
+            }
+            .toMap()
+        return "Total spent: $total, categories: $byCategory"
+    }
 }
 

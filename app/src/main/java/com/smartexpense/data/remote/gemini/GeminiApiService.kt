@@ -41,7 +41,8 @@ class GeminiApiService(
 
     suspend fun generateInsight(
         expenses: List<Expense>,
-        budgetSummary: String
+        budgetSummary: String,
+        categoryMap: Map<Long, String>
     ): Result<InsightResult> = runCatching {
         val expenseSummaryJson = gson.toJson(
             expenses.map { expense ->
@@ -50,6 +51,7 @@ class GeminiApiService(
                     "amount" to expense.amount,
                     "merchantName" to expense.merchantName,
                     "categoryId" to expense.categoryId,
+                    "category" to (categoryMap[expense.categoryId] ?: "Other"),
                     "date" to expense.date.toString(),
                     "notes" to expense.notes,
                     "isAiCategorized" to expense.isAiCategorized
@@ -61,7 +63,7 @@ class GeminiApiService(
             prompt = INSIGHT_PROMPT_TEMPLATE
                 .replace("{expenseSummaryJson}", if (budgetSummary.isNotBlank()) budgetSummary else expenseSummaryJson),
             parser = { json ->
-                gson.fromJson(json, InsightPayload::class.java).toDomain(expenses)
+                gson.fromJson(json, InsightPayload::class.java).toDomain(expenses, categoryMap)
             }
         )
     }
@@ -77,7 +79,7 @@ class GeminiApiService(
         )
         val body = gson.toJson(requestPayload).toRequestBody(JSON_MEDIA_TYPE)
         val request = Request.Builder()
-            .url("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$apiKey")
+            .url("https://generativelanguage.googleapis.com/v1beta/models/$GEMINI_MODEL:generateContent?key=$apiKey")
             .post(body)
             .build()
 
@@ -117,12 +119,16 @@ class GeminiApiService(
         confidence = confidence
     )
 
-    private fun InsightPayload.toDomain(expenses: List<Expense>): InsightResult = InsightResult(
+    private fun InsightPayload.toDomain(
+        expenses: List<Expense>,
+        categoryMap: Map<Long, String>
+    ): InsightResult = InsightResult(
         month = expenses.maxOfOrNull { YearMonth.from(it.date) } ?: YearMonth.now(),
         summary = summary.orEmpty(),
         topCategories = topCategories.map { item ->
+            val resolvedCategory = resolveCategoryName(item.category, categoryMap)
             CategorySpend(
-                category = item.category,
+                category = resolvedCategory,
                 amount = item.amount,
                 trend = item.trend
             )
@@ -131,6 +137,16 @@ class GeminiApiService(
         budgetScore = budgetScore,
         generatedAt = LocalDateTime.now()
     )
+
+    private fun resolveCategoryName(category: String, categoryMap: Map<Long, String>): String {
+        val trimmed = category.trim()
+        val numericId = trimmed.toLongOrNull()
+        return if (numericId != null) {
+            categoryMap[numericId] ?: "Other"
+        } else {
+            trimmed
+        }
+    }
 
     private data class ParsedExpensePayload(
         @SerializedName("merchantName") val merchantName: String?,
@@ -155,6 +171,8 @@ class GeminiApiService(
 
     private companion object {
         private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
+
+        private const val GEMINI_MODEL = "gemini-2.5-flash"
 
         private const val EXPENSE_PROMPT_TEMPLATE = """
             You are a financial data extraction assistant.

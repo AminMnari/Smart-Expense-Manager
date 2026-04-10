@@ -9,7 +9,10 @@ import java.time.YearMonth
  * Contract for AI insight generation and caching.
  */
 interface InsightRepository {
-    suspend fun generateInsight(expenses: List<Expense>): InsightResult
+    suspend fun generateInsight(
+        expenses: List<Expense>,
+        categoryMap: Map<Long, String>
+    ): InsightResult
     fun getCachedInsight(month: YearMonth): Flow<InsightResult?>
     suspend fun saveInsight(insight: InsightResult)
 }
